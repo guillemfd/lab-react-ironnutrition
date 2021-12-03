@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import FoodBox from "./components/FoodBox/FoodBox";
+import {Col } from "antd";
+import foods from "./foods.json";
+import { useState } from "react";
+import AddFoodForm from './components/AddFoodForm/AddFoodForm'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  const[foodsArray, setFoodsArray] = useState(foods)
 
+  const deleteFood = (itemNameToDelete) => {
+    const filteredFoodArray = foodsArray.filter((item) => {
+      return itemNameToDelete !== item.name;
+    });
+    setFoodsArray(filteredFoodArray)
+  }
+
+  return <div className="App">
+  <AddFoodForm foodsArray={foodsArray} setFoodsArray={setFoodsArray}/>
+  <h2>Food List: </h2>
+  <Col>
+    {foodsArray.map((item, index) => {
+      return (
+      <FoodBox item={item} key={index + Date.now()} deleteFood={deleteFood}/>
+      )
+    })}
+  </Col>
+  </div>;
+}
 export default App;
